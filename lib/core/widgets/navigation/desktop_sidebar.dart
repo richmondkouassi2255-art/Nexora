@@ -22,14 +22,14 @@ class DesktopSidebar extends StatelessWidget {
       selectedIcon: Icons.home_rounded,
     ),
     _SidebarDestination(
-      label: 'Explorer',
-      icon: Icons.explore_outlined,
-      selectedIcon: Icons.explore_rounded,
+      label: 'Amis',
+      icon: Icons.people_outline_rounded,
+      selectedIcon: Icons.people_rounded,
     ),
     _SidebarDestination(
-      label: 'Spaces',
-      icon: Icons.groups_outlined,
-      selectedIcon: Icons.groups_rounded,
+      label: 'Vidéo',
+      icon: Icons.play_circle_outline_rounded,
+      selectedIcon: Icons.play_circle_fill_rounded,
     ),
     _SidebarDestination(
       label: 'Messages',
@@ -76,8 +76,9 @@ class DesktopSidebar extends StatelessWidget {
                 horizontal: AppSpacing.md,
               ),
               itemCount: _destinations.length,
-              separatorBuilder: (_, _) =>
-                  const SizedBox(height: AppSpacing.xs),
+              separatorBuilder: (_, _) => const SizedBox(
+                height: AppSpacing.xs,
+              ),
               itemBuilder: (context, index) {
                 final destination = _destinations[index];
                 final isSelected = currentIndex == index;
