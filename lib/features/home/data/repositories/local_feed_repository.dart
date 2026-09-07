@@ -73,10 +73,7 @@ class LocalFeedRepository {
         reactions: 61,
         comments: 12,
         shares: 6,
-        feedTypes: [
-          MomentFeed.friends,
-          MomentFeed.discover,
-        ],
+        feedTypes: [MomentFeed.friends, MomentFeed.discover],
       ),
       Moment(
         id: 'moment-005',

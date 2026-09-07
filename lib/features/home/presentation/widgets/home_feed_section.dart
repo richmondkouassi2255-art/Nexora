@@ -10,9 +10,7 @@ import 'feed_filter_bar.dart';
 import 'moment_card.dart';
 
 class HomeFeedSection extends ConsumerWidget {
-  const HomeFeedSection({
-    super.key,
-  });
+  const HomeFeedSection({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -31,11 +29,7 @@ class HomeFeedSection extends ConsumerWidget {
         if (moments.isEmpty)
           const _EmptyFeed()
         else
-          ..._buildMoments(
-            context,
-            ref,
-            moments,
-          ),
+          ..._buildMoments(context, ref, moments),
       ],
     );
   }
@@ -64,38 +58,23 @@ class HomeFeedSection extends ConsumerWidget {
                 .toggleLike(moments[index].id);
           },
           onCommentTap: () {
-            _showCommentsSheet(
-              context,
-              ref,
-              moments[index],
-            );
+            _showCommentsSheet(context, ref, moments[index]);
           },
           onShareTap: () {
-            ref
-                .read(feedControllerProvider.notifier)
-                .share(moments[index].id);
+            ref.read(feedControllerProvider.notifier).share(moments[index].id);
 
             _showShareFeedback(context);
           },
           onMoreTap: () {
-            _showMomentMenu(
-              context,
-              ref,
-              moments[index],
-            );
+            _showMomentMenu(context, ref, moments[index]);
           },
         ),
-        if (index < moments.length - 1)
-          const SizedBox(height: AppSpacing.lg),
+        if (index < moments.length - 1) const SizedBox(height: AppSpacing.lg),
       ],
     ];
   }
 
-  void _showCommentsSheet(
-    BuildContext context,
-    WidgetRef ref,
-    Moment moment,
-  ) {
+  void _showCommentsSheet(BuildContext context, WidgetRef ref, Moment moment) {
     showModalBottomSheet<void>(
       context: context,
       isScrollControlled: true,
@@ -105,9 +84,7 @@ class HomeFeedSection extends ConsumerWidget {
         return _CommentsSheet(
           moment: moment,
           onCommentAdded: () {
-            ref
-                .read(feedControllerProvider.notifier)
-                .addComment(moment.id);
+            ref.read(feedControllerProvider.notifier).addComment(moment.id);
           },
         );
       },
@@ -119,19 +96,13 @@ class HomeFeedSection extends ConsumerWidget {
       ..hideCurrentSnackBar()
       ..showSnackBar(
         const SnackBar(
-          content: Text(
-            'Moment partagé.',
-          ),
+          content: Text('Moment partagé.'),
           behavior: SnackBarBehavior.floating,
         ),
       );
   }
 
-  void _showMomentMenu(
-    BuildContext context,
-    WidgetRef ref,
-    Moment moment,
-  ) {
+  void _showMomentMenu(BuildContext context, WidgetRef ref, Moment moment) {
     showModalBottomSheet<void>(
       context: context,
       backgroundColor: AppColors.surface,
@@ -153,9 +124,7 @@ class HomeFeedSection extends ConsumerWidget {
                     Icons.bookmark_border_rounded,
                     color: AppColors.primary,
                   ),
-                  title: const Text(
-                    'Enregistrer',
-                  ),
+                  title: const Text('Enregistrer'),
                   onTap: () {
                     Navigator.of(sheetContext).pop();
 
@@ -163,9 +132,7 @@ class HomeFeedSection extends ConsumerWidget {
                       ..hideCurrentSnackBar()
                       ..showSnackBar(
                         const SnackBar(
-                          content: Text(
-                            'Moment enregistré.',
-                          ),
+                          content: Text('Moment enregistré.'),
                           behavior: SnackBarBehavior.floating,
                         ),
                       );
@@ -176,9 +143,7 @@ class HomeFeedSection extends ConsumerWidget {
                     Icons.person_outline_rounded,
                     color: AppColors.primary,
                   ),
-                  title: Text(
-                    'Voir le profil de ${moment.authorName}',
-                  ),
+                  title: Text('Voir le profil de ${moment.authorName}'),
                   onTap: () {
                     Navigator.of(sheetContext).pop();
 
@@ -186,9 +151,7 @@ class HomeFeedSection extends ConsumerWidget {
                       ..hideCurrentSnackBar()
                       ..showSnackBar(
                         SnackBar(
-                          content: Text(
-                            'Profil de ${moment.authorName}.',
-                          ),
+                          content: Text('Profil de ${moment.authorName}.'),
                           behavior: SnackBarBehavior.floating,
                         ),
                       );
@@ -199,9 +162,7 @@ class HomeFeedSection extends ConsumerWidget {
                     Icons.visibility_off_outlined,
                     color: AppColors.textSecondary,
                   ),
-                  title: const Text(
-                    'Masquer ce Moment',
-                  ),
+                  title: const Text('Masquer ce Moment'),
                   onTap: () {
                     Navigator.of(sheetContext).pop();
 
@@ -213,9 +174,7 @@ class HomeFeedSection extends ConsumerWidget {
                       ..hideCurrentSnackBar()
                       ..showSnackBar(
                         const SnackBar(
-                          content: Text(
-                            'Moment masqué de ton fil.',
-                          ),
+                          content: Text('Moment masqué de ton fil.'),
                           behavior: SnackBarBehavior.floating,
                         ),
                       );
@@ -231,10 +190,7 @@ class HomeFeedSection extends ConsumerWidget {
 }
 
 class _CommentsSheet extends StatefulWidget {
-  const _CommentsSheet({
-    required this.moment,
-    required this.onCommentAdded,
-  });
+  const _CommentsSheet({required this.moment, required this.onCommentAdded});
 
   final Moment moment;
   final VoidCallback onCommentAdded;
@@ -272,27 +228,13 @@ class _CommentsSheetState extends State<_CommentsSheet> {
   }
 
   String _commentAuthor(int index) {
-    const authors = [
-      'Emma',
-      'Lucas',
-      'Sofia',
-      'Noah',
-      'Mia',
-      'Léo',
-    ];
+    const authors = ['Emma', 'Lucas', 'Sofia', 'Noah', 'Mia', 'Léo'];
 
     return authors[index % authors.length];
   }
 
   String _commentInitials(int index) {
-    const initials = [
-      'E',
-      'L',
-      'S',
-      'N',
-      'M',
-      'L',
-    ];
+    const initials = ['E', 'L', 'S', 'N', 'M', 'L'];
 
     return initials[index % initials.length];
   }
@@ -340,9 +282,7 @@ class _CommentsSheetState extends State<_CommentsSheet> {
 
     return SafeArea(
       child: Padding(
-        padding: EdgeInsets.only(
-          bottom: bottomInset,
-        ),
+        padding: EdgeInsets.only(bottom: bottomInset),
         child: SizedBox(
           height: MediaQuery.sizeOf(context).height * 0.78,
           child: Column(
@@ -360,9 +300,7 @@ class _CommentsSheetState extends State<_CommentsSheet> {
                       Icons.chat_bubble_outline_rounded,
                       color: AppColors.primary,
                     ),
-                    const SizedBox(
-                      width: AppSpacing.sm,
-                    ),
+                    const SizedBox(width: AppSpacing.sm),
                     Expanded(
                       child: Text(
                         'Commentaires (${_comments.length})',
@@ -377,34 +315,23 @@ class _CommentsSheetState extends State<_CommentsSheet> {
                       onPressed: () {
                         Navigator.of(context).pop();
                       },
-                      icon: const Icon(
-                        Icons.close_rounded,
-                      ),
+                      icon: const Icon(Icons.close_rounded),
                     ),
                   ],
                 ),
               ),
-              const Divider(
-                height: 1,
-                color: AppColors.border,
-              ),
+              const Divider(height: 1, color: AppColors.border),
               Expanded(
                 child: _comments.isEmpty
                     ? const _EmptyComments()
                     : ListView.separated(
-                        padding: const EdgeInsets.all(
-                          AppSpacing.lg,
-                        ),
+                        padding: const EdgeInsets.all(AppSpacing.lg),
                         itemCount: _comments.length,
                         separatorBuilder: (_, __) {
-                          return const SizedBox(
-                            height: AppSpacing.lg,
-                          );
+                          return const SizedBox(height: AppSpacing.lg);
                         },
                         itemBuilder: (context, index) {
-                          return _CommentTile(
-                            comment: _comments[index],
-                          );
+                          return _CommentTile(comment: _comments[index]);
                         },
                       ),
               ),
@@ -417,11 +344,7 @@ class _CommentsSheetState extends State<_CommentsSheet> {
                 ),
                 decoration: const BoxDecoration(
                   color: AppColors.surface,
-                  border: Border(
-                    top: BorderSide(
-                      color: AppColors.border,
-                    ),
-                  ),
+                  border: Border(top: BorderSide(color: AppColors.border)),
                 ),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.end,
@@ -437,25 +360,21 @@ class _CommentsSheetState extends State<_CommentsSheet> {
                         ),
                       ),
                     ),
-                    const SizedBox(
-                      width: AppSpacing.sm,
-                    ),
+                    const SizedBox(width: AppSpacing.sm),
                     Expanded(
                       child: TextField(
                         controller: _controller,
                         focusNode: _focusNode,
                         minLines: 1,
                         maxLines: 4,
-                        textCapitalization:
-                            TextCapitalization.sentences,
+                        textCapitalization: TextCapitalization.sentences,
                         onSubmitted: (_) {
                           _submitComment();
                         },
                         decoration: InputDecoration(
                           hintText: 'Écrire un commentaire...',
                           filled: true,
-                          fillColor:
-                              AppColors.surfaceSecondary,
+                          fillColor: AppColors.surfaceSecondary,
                           border: OutlineInputBorder(
                             borderRadius: AppRadius.large,
                             borderSide: BorderSide.none,
@@ -470,26 +389,21 @@ class _CommentsSheetState extends State<_CommentsSheet> {
                               color: AppColors.primary,
                             ),
                           ),
-                          contentPadding:
-                              const EdgeInsets.symmetric(
+                          contentPadding: const EdgeInsets.symmetric(
                             horizontal: AppSpacing.md,
                             vertical: AppSpacing.sm,
                           ),
                         ),
                       ),
                     ),
-                    const SizedBox(
-                      width: AppSpacing.sm,
-                    ),
+                    const SizedBox(width: AppSpacing.sm),
                     ValueListenableBuilder<TextEditingValue>(
                       valueListenable: _controller,
                       builder: (context, value, _) {
-                        final canSubmit =
-                            value.text.trim().isNotEmpty;
+                        final canSubmit = value.text.trim().isNotEmpty;
 
                         return IconButton(
-                          onPressed:
-                              canSubmit ? _submitComment : null,
+                          onPressed: canSubmit ? _submitComment : null,
                           style: IconButton.styleFrom(
                             backgroundColor: canSubmit
                                 ? AppColors.primary
@@ -498,10 +412,7 @@ class _CommentsSheetState extends State<_CommentsSheet> {
                                 ? AppColors.white
                                 : AppColors.textMuted,
                           ),
-                          icon: const Icon(
-                            Icons.send_rounded,
-                            size: 19,
-                          ),
+                          icon: const Icon(Icons.send_rounded, size: 19),
                         );
                       },
                     ),
@@ -517,9 +428,7 @@ class _CommentsSheetState extends State<_CommentsSheet> {
 }
 
 class _CommentTile extends StatelessWidget {
-  const _CommentTile({
-    required this.comment,
-  });
+  const _CommentTile({required this.comment});
 
   final _LocalComment comment;
 
@@ -544,14 +453,10 @@ class _CommentTile extends StatelessWidget {
             ),
           ),
         ),
-        const SizedBox(
-          width: AppSpacing.sm,
-        ),
+        const SizedBox(width: AppSpacing.sm),
         Expanded(
           child: Container(
-            padding: const EdgeInsets.all(
-              AppSpacing.md,
-            ),
+            padding: const EdgeInsets.all(AppSpacing.md),
             decoration: BoxDecoration(
               color: comment.isCurrentUser
                   ? AppColors.primaryLight
@@ -569,9 +474,7 @@ class _CommentTile extends StatelessWidget {
                     fontWeight: FontWeight.w700,
                   ),
                 ),
-                const SizedBox(
-                  height: AppSpacing.xs,
-                ),
+                const SizedBox(height: AppSpacing.xs),
                 Text(
                   comment.text,
                   style: const TextStyle(
@@ -580,15 +483,10 @@ class _CommentTile extends StatelessWidget {
                     height: 1.4,
                   ),
                 ),
-                const SizedBox(
-                  height: AppSpacing.xs,
-                ),
+                const SizedBox(height: AppSpacing.xs),
                 const Text(
                   'À l’instant',
-                  style: TextStyle(
-                    color: AppColors.textMuted,
-                    fontSize: 11,
-                  ),
+                  style: TextStyle(color: AppColors.textMuted, fontSize: 11),
                 ),
               ],
             ),
@@ -620,9 +518,7 @@ class _EmptyComments extends StatelessWidget {
   Widget build(BuildContext context) {
     return const Center(
       child: Padding(
-        padding: EdgeInsets.all(
-          AppSpacing.xxl,
-        ),
+        padding: EdgeInsets.all(AppSpacing.xxl),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -631,9 +527,7 @@ class _EmptyComments extends StatelessWidget {
               size: 44,
               color: AppColors.primary,
             ),
-            SizedBox(
-              height: AppSpacing.md,
-            ),
+            SizedBox(height: AppSpacing.md),
             Text(
               'Aucun commentaire',
               style: TextStyle(
@@ -642,16 +536,11 @@ class _EmptyComments extends StatelessWidget {
                 fontWeight: FontWeight.w700,
               ),
             ),
-            SizedBox(
-              height: AppSpacing.xs,
-            ),
+            SizedBox(height: AppSpacing.xs),
             Text(
               'Sois la première personne à réagir à ce Moment.',
               textAlign: TextAlign.center,
-              style: TextStyle(
-                color: AppColors.textSecondary,
-                fontSize: 14,
-              ),
+              style: TextStyle(color: AppColors.textSecondary, fontSize: 14),
             ),
           ],
         ),
@@ -667,26 +556,16 @@ class _EmptyFeed extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(
-        AppSpacing.xxl,
-      ),
+      padding: const EdgeInsets.all(AppSpacing.xxl),
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: AppColors.border,
-        ),
+        border: Border.all(color: AppColors.border),
       ),
       child: const Column(
         children: [
-          Icon(
-            Icons.explore_outlined,
-            size: 44,
-            color: AppColors.primary,
-          ),
-          SizedBox(
-            height: AppSpacing.md,
-          ),
+          Icon(Icons.explore_outlined, size: 44, color: AppColors.primary),
+          SizedBox(height: AppSpacing.md),
           Text(
             'Rien à afficher pour le moment',
             textAlign: TextAlign.center,
@@ -696,16 +575,11 @@ class _EmptyFeed extends StatelessWidget {
               fontWeight: FontWeight.w700,
             ),
           ),
-          SizedBox(
-            height: AppSpacing.xs,
-          ),
+          SizedBox(height: AppSpacing.xs),
           Text(
             'Découvre de nouvelles personnes et communautés.',
             textAlign: TextAlign.center,
-            style: TextStyle(
-              color: AppColors.textSecondary,
-              fontSize: 14,
-            ),
+            style: TextStyle(color: AppColors.textSecondary, fontSize: 14),
           ),
         ],
       ),

@@ -65,10 +65,7 @@ class _MobileHomeHeader extends StatelessWidget {
               ),
             ),
           ),
-          _HeaderIconButton(
-            icon: Icons.search_rounded,
-            onTap: onSearchTap,
-          ),
+          _HeaderIconButton(icon: Icons.search_rounded, onTap: onSearchTap),
           const SizedBox(width: AppSpacing.sm),
           _HeaderIconButton(
             icon: Icons.notifications_none_rounded,
@@ -100,16 +97,10 @@ class _DesktopHomeHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 72,
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppSpacing.xxl,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.xxl),
       decoration: const BoxDecoration(
         color: AppColors.surface,
-        border: Border(
-          bottom: BorderSide(
-            color: AppColors.border,
-          ),
-        ),
+        border: Border(bottom: BorderSide(color: AppColors.border)),
       ),
       child: Row(
         children: [
@@ -119,28 +110,19 @@ class _DesktopHomeHeader extends StatelessWidget {
               borderRadius: BorderRadius.circular(12),
               child: Container(
                 height: 42,
-                constraints: const BoxConstraints(
-                  maxWidth: 520,
-                ),
-                padding: const EdgeInsets.symmetric(
-                  horizontal: AppSpacing.md,
-                ),
+                constraints: const BoxConstraints(maxWidth: 520),
+                padding: const EdgeInsets.symmetric(horizontal: AppSpacing.md),
                 decoration: BoxDecoration(
                   color: AppColors.surfaceSecondary,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: const Row(
                   children: [
-                    Icon(
-                      Icons.search_rounded,
-                      color: AppColors.textSecondary,
-                    ),
+                    Icon(Icons.search_rounded, color: AppColors.textSecondary),
                     SizedBox(width: AppSpacing.sm),
                     Text(
                       'Rechercher sur Nexora',
-                      style: TextStyle(
-                        color: AppColors.textSecondary,
-                      ),
+                      style: TextStyle(color: AppColors.textSecondary),
                     ),
                   ],
                 ),
@@ -163,10 +145,7 @@ class _DesktopHomeHeader extends StatelessWidget {
 }
 
 class _HeaderIconButton extends StatelessWidget {
-  const _HeaderIconButton({
-    required this.icon,
-    this.onTap,
-  });
+  const _HeaderIconButton({required this.icon, this.onTap});
 
   final IconData icon;
   final VoidCallback? onTap;
@@ -182,10 +161,7 @@ class _HeaderIconButton extends StatelessWidget {
         child: SizedBox(
           width: 42,
           height: 42,
-          child: Icon(
-            icon,
-            color: AppColors.textPrimary,
-          ),
+          child: Icon(icon, color: AppColors.textPrimary),
         ),
       ),
     );

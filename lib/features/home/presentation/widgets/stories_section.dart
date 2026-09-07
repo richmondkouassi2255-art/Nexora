@@ -5,11 +5,7 @@ import '../../../../app/theme/app_radius.dart';
 import '../../../../app/theme/app_spacing.dart';
 
 class StoriesSection extends StatelessWidget {
-  const StoriesSection({
-    super.key,
-    this.onSeeAllTap,
-    this.onAddStoryTap,
-  });
+  const StoriesSection({super.key, this.onSeeAllTap, this.onAddStoryTap});
 
   final VoidCallback? onSeeAllTap;
   final VoidCallback? onAddStoryTap;
@@ -56,20 +52,15 @@ class StoriesSection extends StatelessWidget {
             scrollDirection: Axis.horizontal,
             padding: EdgeInsets.zero,
             itemCount: _stories.length + 1,
-            separatorBuilder: (_, __) =>
-                const SizedBox(width: AppSpacing.md),
+            separatorBuilder: (_, __) => const SizedBox(width: AppSpacing.md),
             itemBuilder: (context, index) {
               if (index == 0) {
-                return _AddStoryCard(
-                  onTap: onAddStoryTap,
-                );
+                return _AddStoryCard(onTap: onAddStoryTap);
               }
 
               final story = _stories[index - 1];
 
-              return _StoryCard(
-                story: story,
-              );
+              return _StoryCard(story: story);
             },
           ),
         ),
@@ -79,9 +70,7 @@ class StoriesSection extends StatelessWidget {
 }
 
 class _AddStoryCard extends StatelessWidget {
-  const _AddStoryCard({
-    this.onTap,
-  });
+  const _AddStoryCard({this.onTap});
 
   final VoidCallback? onTap;
 
@@ -95,10 +84,7 @@ class _AddStoryCard extends StatelessWidget {
         decoration: BoxDecoration(
           color: AppColors.surface,
           borderRadius: AppRadius.large,
-          border: Border.all(
-            color: AppColors.border,
-            style: BorderStyle.solid,
-          ),
+          border: Border.all(color: AppColors.border, style: BorderStyle.solid),
         ),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -142,9 +128,7 @@ class _AddStoryCard extends StatelessWidget {
 }
 
 class _StoryCard extends StatelessWidget {
-  const _StoryCard({
-    required this.story,
-  });
+  const _StoryCard({required this.story});
 
   final _StoryData story;
 
@@ -154,10 +138,7 @@ class _StoryCard extends StatelessWidget {
       width: 122,
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [
-            Color(0xFF2E1065),
-            Color(0xFF111827),
-          ],
+          colors: [Color(0xFF2E1065), Color(0xFF111827)],
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
         ),
@@ -242,10 +223,7 @@ class _StoryCard extends StatelessWidget {
 }
 
 class _StoryData {
-  const _StoryData({
-    required this.name,
-    required this.initials,
-  });
+  const _StoryData({required this.name, required this.initials});
 
   final String name;
   final String initials;

@@ -20,16 +20,10 @@ class HomeAppBar extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 90,
-      padding: const EdgeInsets.symmetric(
-        horizontal: AppSpacing.lg,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
       decoration: const BoxDecoration(
         color: AppColors.surface,
-        border: Border(
-          bottom: BorderSide(
-            color: AppColors.border,
-          ),
-        ),
+        border: Border(bottom: BorderSide(color: AppColors.border)),
       ),
       child: Row(
         children: [
@@ -41,19 +35,11 @@ class HomeAppBar extends StatelessWidget {
             onTap: onNotificationsTap,
           ),
           const SizedBox(width: AppSpacing.md),
-          _AppBarAction(
-            icon: Icons.grid_view_rounded,
-            onTap: onSpacesTap,
-          ),
+          _AppBarAction(icon: Icons.grid_view_rounded, onTap: onSpacesTap),
           const SizedBox(width: AppSpacing.md),
-          _SpacesAction(
-            onTap: onSpacesTap,
-          ),
+          _SpacesAction(onTap: onSpacesTap),
           const SizedBox(width: AppSpacing.md),
-          _AppBarAction(
-            icon: Icons.menu_rounded,
-            onTap: onMenuTap,
-          ),
+          _AppBarAction(icon: Icons.menu_rounded, onTap: onMenuTap),
         ],
       ),
     );
@@ -72,10 +58,7 @@ class _NexoraBrand extends StatelessWidget {
           height: 56,
           decoration: BoxDecoration(
             gradient: const LinearGradient(
-              colors: [
-                Color(0xFF6D28D9),
-                Color(0xFF2E0BAA),
-              ],
+              colors: [Color(0xFF6D28D9), Color(0xFF2E0BAA)],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
@@ -114,11 +97,7 @@ class _NexoraBrand extends StatelessWidget {
 }
 
 class _AppBarAction extends StatelessWidget {
-  const _AppBarAction({
-    required this.icon,
-    this.badge,
-    this.onTap,
-  });
+  const _AppBarAction({required this.icon, this.badge, this.onTap});
 
   final IconData icon;
   final String? badge;
@@ -131,11 +110,7 @@ class _AppBarAction extends StatelessWidget {
       children: [
         IconButton(
           onPressed: onTap,
-          icon: Icon(
-            icon,
-            size: 30,
-            color: AppColors.textPrimary,
-          ),
+          icon: Icon(icon, size: 30, color: AppColors.textPrimary),
         ),
         if (badge != null)
           Positioned(
@@ -165,9 +140,7 @@ class _AppBarAction extends StatelessWidget {
 }
 
 class _SpacesAction extends StatelessWidget {
-  const _SpacesAction({
-    this.onTap,
-  });
+  const _SpacesAction({this.onTap});
 
   final VoidCallback? onTap;
 

@@ -1,12 +1,6 @@
 import 'package:flutter/material.dart';
 
-enum MomentFeed {
-  forYou,
-  following,
-  friends,
-  trending,
-  discover,
-}
+enum MomentFeed { forYou, following, friends, trending, discover }
 
 class Moment {
   const Moment({

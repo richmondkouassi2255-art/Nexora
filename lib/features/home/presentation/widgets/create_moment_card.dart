@@ -31,9 +31,7 @@ class CreateMomentCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: AppRadius.large,
-        border: Border.all(
-          color: AppColors.border,
-        ),
+        border: Border.all(color: AppColors.border),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.04),
@@ -58,16 +56,11 @@ class CreateMomentCard extends StatelessWidget {
                   ),
                 ),
               ),
-              _CreateButton(
-                onTap: onCreateTap,
-              ),
+              _CreateButton(onTap: onCreateTap),
             ],
           ),
           const SizedBox(height: AppSpacing.lg),
-          const Divider(
-            color: AppColors.border,
-            height: 1,
-          ),
+          const Divider(color: AppColors.border, height: 1),
           const SizedBox(height: AppSpacing.lg),
           Wrap(
             alignment: WrapAlignment.spaceBetween,
@@ -128,10 +121,7 @@ class _Avatar extends StatelessWidget {
       height: 52,
       decoration: BoxDecoration(
         gradient: const LinearGradient(
-          colors: [
-            Color(0xFF6D28D9),
-            Color(0xFF312E81),
-          ],
+          colors: [Color(0xFF6D28D9), Color(0xFF312E81)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -151,9 +141,7 @@ class _Avatar extends StatelessWidget {
 }
 
 class _CreateButton extends StatelessWidget {
-  const _CreateButton({
-    this.onTap,
-  });
+  const _CreateButton({this.onTap});
 
   final VoidCallback? onTap;
 
@@ -168,11 +156,7 @@ class _CreateButton extends StatelessWidget {
         child: const SizedBox(
           width: 52,
           height: 52,
-          child: Icon(
-            Icons.add_rounded,
-            color: Colors.white,
-            size: 30,
-          ),
+          child: Icon(Icons.add_rounded, color: Colors.white, size: 30),
         ),
       ),
     );
@@ -205,11 +189,7 @@ class _MomentAction extends StatelessWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(
-              icon,
-              color: color,
-              size: 24,
-            ),
+            Icon(icon, color: color, size: 24),
             const SizedBox(width: 6),
             Text(
               label,

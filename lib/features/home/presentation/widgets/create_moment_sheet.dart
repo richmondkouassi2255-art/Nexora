@@ -4,23 +4,17 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_radius.dart';
 import '../../../../app/theme/app_spacing.dart';
-import '../../domain/models/moment.dart';
 import '../providers/feed_provider.dart';
 
 class CreateMomentSheet extends ConsumerStatefulWidget {
-  const CreateMomentSheet({
-    super.key,
-  });
+  const CreateMomentSheet({super.key});
 
   @override
-  ConsumerState<CreateMomentSheet> createState() =>
-      _CreateMomentSheetState();
+  ConsumerState<CreateMomentSheet> createState() => _CreateMomentSheetState();
 }
 
-class _CreateMomentSheetState
-    extends ConsumerState<CreateMomentSheet> {
-  final TextEditingController _controller =
-      TextEditingController();
+class _CreateMomentSheetState extends ConsumerState<CreateMomentSheet> {
+  final TextEditingController _controller = TextEditingController();
 
   final FocusNode _focusNode = FocusNode();
 
@@ -34,8 +28,7 @@ class _CreateMomentSheetState
   }
 
   bool get _canPublish {
-    return _controller.text.trim().isNotEmpty &&
-        !_isPublishing;
+    return _controller.text.trim().isNotEmpty && !_isPublishing;
   }
 
   void _publish() {
@@ -49,9 +42,7 @@ class _CreateMomentSheetState
       _isPublishing = true;
     });
 
-    ref.read(feedControllerProvider.notifier).createMoment(
-          content: content,
-        );
+    ref.read(feedControllerProvider.notifier).createMoment(content: content);
 
     Navigator.of(context).pop();
 
@@ -72,8 +63,7 @@ class _CreateMomentSheetState
         padding: EdgeInsets.only(
           left: AppSpacing.lg,
           right: AppSpacing.lg,
-          bottom: MediaQuery.viewInsetsOf(context).bottom +
-              AppSpacing.lg,
+          bottom: MediaQuery.viewInsetsOf(context).bottom + AppSpacing.lg,
         ),
         child: SingleChildScrollView(
           child: Column(
@@ -95,8 +85,7 @@ class _CreateMomentSheetState
                   const SizedBox(width: AppSpacing.md),
                   const Expanded(
                     child: Column(
-                      crossAxisAlignment:
-                          CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
                           'Publier un Moment',
@@ -121,9 +110,7 @@ class _CreateMomentSheetState
                     onPressed: () {
                       Navigator.of(context).pop();
                     },
-                    icon: const Icon(
-                      Icons.close_rounded,
-                    ),
+                    icon: const Icon(Icons.close_rounded),
                   ),
                 ],
               ),
@@ -132,9 +119,7 @@ class _CreateMomentSheetState
                 decoration: BoxDecoration(
                   color: AppColors.surfaceSecondary,
                   borderRadius: AppRadius.medium,
-                  border: Border.all(
-                    color: AppColors.border,
-                  ),
+                  border: Border.all(color: AppColors.border),
                 ),
                 child: TextField(
                   controller: _controller,
@@ -143,20 +128,15 @@ class _CreateMomentSheetState
                   minLines: 5,
                   maxLines: 10,
                   maxLength: 500,
-                  textCapitalization:
-                      TextCapitalization.sentences,
+                  textCapitalization: TextCapitalization.sentences,
                   onChanged: (_) {
                     setState(() {});
                   },
                   decoration: const InputDecoration(
-                    hintText:
-                        'Quoi de neuf sur Nexora ?',
-                    hintStyle: TextStyle(
-                      color: AppColors.textMuted,
-                    ),
+                    hintText: 'Quoi de neuf sur Nexora ?',
+                    hintStyle: TextStyle(color: AppColors.textMuted),
                     border: InputBorder.none,
-                    contentPadding:
-                        EdgeInsets.all(AppSpacing.lg),
+                    contentPadding: EdgeInsets.all(AppSpacing.lg),
                   ),
                 ),
               ),
@@ -167,27 +147,18 @@ class _CreateMomentSheetState
                 width: double.infinity,
                 height: 52,
                 child: FilledButton.icon(
-                  onPressed:
-                      _canPublish ? _publish : null,
+                  onPressed: _canPublish ? _publish : null,
                   style: FilledButton.styleFrom(
-                    backgroundColor:
-                        AppColors.primary,
-                    disabledBackgroundColor:
-                        AppColors.surfaceSecondary,
-                    disabledForegroundColor:
-                        AppColors.textMuted,
+                    backgroundColor: AppColors.primary,
+                    disabledBackgroundColor: AppColors.surfaceSecondary,
+                    disabledForegroundColor: AppColors.textMuted,
                     shape: RoundedRectangleBorder(
-                      borderRadius:
-                          AppRadius.medium,
+                      borderRadius: AppRadius.medium,
                     ),
                   ),
-                  icon: const Icon(
-                    Icons.send_rounded,
-                  ),
+                  icon: const Icon(Icons.send_rounded),
                   label: Text(
-                    _isPublishing
-                        ? 'Publication...'
-                        : 'Publier le Moment',
+                    _isPublishing ? 'Publication...' : 'Publier le Moment',
                   ),
                 ),
               ),
@@ -263,11 +234,7 @@ class _ComposerOption extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(
-            icon,
-            color: color,
-            size: 19,
-          ),
+          Icon(icon, color: color, size: 19),
           const SizedBox(width: AppSpacing.xs),
           Text(
             label,

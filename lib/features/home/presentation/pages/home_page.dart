@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 
 import '../../../../app/router/app_routes.dart';
 import '../../../../app/theme/app_colors.dart';
+import '../../../../app/theme/app_radius.dart';
 import '../../../../app/theme/app_spacing.dart';
 import '../../../../core/responsive/responsive_extensions.dart';
 import '../../../../core/widgets/layout/app_page.dart';
@@ -57,9 +58,7 @@ class HomePage extends StatelessWidget {
         Expanded(
           child: AppPage(
             padding: EdgeInsets.symmetric(
-              horizontal: context.isDesktop
-                  ? AppSpacing.xxxl
-                  : AppSpacing.lg,
+              horizontal: context.isDesktop ? AppSpacing.xxxl : AppSpacing.lg,
               vertical: AppSpacing.xxl,
             ),
             child: _HomeContent(
@@ -74,10 +73,7 @@ class HomePage extends StatelessWidget {
 }
 
 class _HomeContent extends StatelessWidget {
-  const _HomeContent({
-    required this.isDesktop,
-    required this.onCreateMoment,
-  });
+  const _HomeContent({required this.isDesktop, required this.onCreateMoment});
 
   final bool isDesktop;
   final VoidCallback onCreateMoment;
@@ -85,21 +81,15 @@ class _HomeContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (isDesktop) {
-      return _DesktopHomeContent(
-        onCreateMoment: onCreateMoment,
-      );
+      return _DesktopHomeContent(onCreateMoment: onCreateMoment);
     }
 
-    return _MobileHomeContent(
-      onCreateMoment: onCreateMoment,
-    );
+    return _MobileHomeContent(onCreateMoment: onCreateMoment);
   }
 }
 
 class _MobileHomeContent extends StatelessWidget {
-  const _MobileHomeContent({
-    required this.onCreateMoment,
-  });
+  const _MobileHomeContent({required this.onCreateMoment});
 
   final VoidCallback onCreateMoment;
 
@@ -127,10 +117,7 @@ class _MobileHomeContent extends StatelessWidget {
           onMusicTap: onCreateMoment,
         ),
         const SizedBox(height: AppSpacing.xxl),
-        StoriesSection(
-          onSeeAllTap: () {},
-          onAddStoryTap: () {},
-        ),
+        StoriesSection(onSeeAllTap: () {}, onAddStoryTap: () {}),
         const SizedBox(height: AppSpacing.xxl),
         const HomeFeedSection(),
       ],
@@ -139,9 +126,7 @@ class _MobileHomeContent extends StatelessWidget {
 }
 
 class _DesktopHomeContent extends StatelessWidget {
-  const _DesktopHomeContent({
-    required this.onCreateMoment,
-  });
+  const _DesktopHomeContent({required this.onCreateMoment});
 
   final VoidCallback onCreateMoment;
 
@@ -150,25 +135,16 @@ class _DesktopHomeContent extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Expanded(
-          child: _DesktopMainColumn(
-            onCreateMoment: onCreateMoment,
-          ),
-        ),
+        Expanded(child: _DesktopMainColumn(onCreateMoment: onCreateMoment)),
         const SizedBox(width: AppSpacing.xxl),
-        const SizedBox(
-          width: 300,
-          child: _DesktopSidePanel(),
-        ),
+        const SizedBox(width: 300, child: _DesktopSidePanel()),
       ],
     );
   }
 }
 
 class _DesktopMainColumn extends StatelessWidget {
-  const _DesktopMainColumn({
-    required this.onCreateMoment,
-  });
+  const _DesktopMainColumn({required this.onCreateMoment});
 
   final VoidCallback onCreateMoment;
 
@@ -196,10 +172,7 @@ class _DesktopMainColumn extends StatelessWidget {
           onMusicTap: onCreateMoment,
         ),
         const SizedBox(height: AppSpacing.xxl),
-        StoriesSection(
-          onSeeAllTap: () {},
-          onAddStoryTap: () {},
-        ),
+        StoriesSection(onSeeAllTap: () {}, onAddStoryTap: () {}),
         const SizedBox(height: AppSpacing.xxl),
         const HomeFeedSection(),
       ],
@@ -217,10 +190,7 @@ class _DesktopSidePanel extends StatelessWidget {
         _SidePanelCard(
           title: 'Tendances',
           children: const [
-            _TrendingItem(
-              title: 'Flutter',
-              subtitle: '12,4 k discussions',
-            ),
+            _TrendingItem(title: 'Flutter', subtitle: '12,4 k discussions'),
             _TrendingItem(
               title: 'Intelligence artificielle',
               subtitle: '8,7 k discussions',
@@ -251,10 +221,7 @@ class _DesktopSidePanel extends StatelessWidget {
 }
 
 class _SidePanelCard extends StatelessWidget {
-  const _SidePanelCard({
-    required this.title,
-    required this.children,
-  });
+  const _SidePanelCard({required this.title, required this.children});
 
   final String title;
   final List<Widget> children;
@@ -266,9 +233,7 @@ class _SidePanelCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(20),
-        border: Border.all(
-          color: AppColors.border,
-        ),
+        border: Border.all(color: AppColors.border),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -290,10 +255,7 @@ class _SidePanelCard extends StatelessWidget {
 }
 
 class _TrendingItem extends StatelessWidget {
-  const _TrendingItem({
-    required this.title,
-    required this.subtitle,
-  });
+  const _TrendingItem({required this.title, required this.subtitle});
 
   final String title;
   final String subtitle;
@@ -301,9 +263,7 @@ class _TrendingItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(
-        vertical: AppSpacing.sm,
-      ),
+      padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -406,11 +366,7 @@ class _NotificationItem extends StatelessWidget {
             color: iconColor.withValues(alpha: 0.12),
             shape: BoxShape.circle,
           ),
-          child: Icon(
-            icon,
-            color: iconColor,
-            size: 21,
-          ),
+          child: Icon(icon, color: iconColor, size: 21),
         ),
         const SizedBox(width: AppSpacing.md),
         Expanded(
@@ -508,9 +464,7 @@ class _MenuItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      contentPadding: const EdgeInsets.symmetric(
-        vertical: AppSpacing.xs,
-      ),
+      contentPadding: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
       leading: Container(
         width: 42,
         height: 42,
@@ -518,10 +472,7 @@ class _MenuItem extends StatelessWidget {
           color: AppColors.primaryLight,
           borderRadius: AppRadius.medium,
         ),
-        child: Icon(
-          icon,
-          color: AppColors.primary,
-        ),
+        child: Icon(icon, color: AppColors.primary),
       ),
       title: Text(
         title,

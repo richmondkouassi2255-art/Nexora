@@ -47,9 +47,7 @@ class MomentCard extends StatelessWidget {
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: AppRadius.large,
-        border: Border.all(
-          color: AppColors.border,
-        ),
+        border: Border.all(color: AppColors.border),
         boxShadow: [
           BoxShadow(
             color: Colors.black.withValues(alpha: 0.04),
@@ -70,9 +68,7 @@ class MomentCard extends StatelessWidget {
             ),
             child: Row(
               children: [
-                _MomentAvatar(
-                  initials: avatarInitials,
-                ),
+                _MomentAvatar(initials: avatarInitials),
                 const SizedBox(width: AppSpacing.md),
                 Expanded(
                   child: Column(
@@ -108,9 +104,7 @@ class MomentCard extends StatelessWidget {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.symmetric(
-              horizontal: AppSpacing.lg,
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
             child: Text(
               content,
               style: const TextStyle(
@@ -144,9 +138,7 @@ class MomentCard extends StatelessWidget {
                       ? Icons.favorite_rounded
                       : Icons.favorite_border_rounded,
                   label: reactions.toString(),
-                  color: isLiked
-                      ? AppColors.error
-                      : AppColors.textSecondary,
+                  color: isLiked ? AppColors.error : AppColors.textSecondary,
                   onTap: onLikeTap,
                 ),
                 const SizedBox(width: AppSpacing.lg),
@@ -171,9 +163,7 @@ class MomentCard extends StatelessWidget {
 }
 
 class _MomentAvatar extends StatelessWidget {
-  const _MomentAvatar({
-    required this.initials,
-  });
+  const _MomentAvatar({required this.initials});
 
   final String initials;
 
@@ -184,10 +174,7 @@ class _MomentAvatar extends StatelessWidget {
       height: 48,
       decoration: const BoxDecoration(
         gradient: LinearGradient(
-          colors: [
-            Color(0xFF8B5CF6),
-            Color(0xFF4F46E5),
-          ],
+          colors: [Color(0xFF8B5CF6), Color(0xFF4F46E5)],
         ),
         shape: BoxShape.circle,
       ),
@@ -232,11 +219,7 @@ class _MomentAction extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(
-                icon,
-                size: 22,
-                color: color,
-              ),
+              Icon(icon, size: 22, color: color),
               const SizedBox(width: AppSpacing.xs),
               Text(
                 label,

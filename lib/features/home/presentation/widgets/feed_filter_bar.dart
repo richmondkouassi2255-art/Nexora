@@ -16,22 +16,10 @@ class FeedFilterBar extends StatelessWidget {
   final ValueChanged<MomentFeed> onChanged;
 
   static const List<_FeedFilter> _filters = [
-    _FeedFilter(
-      feed: MomentFeed.forYou,
-      label: 'Pour vous',
-    ),
-    _FeedFilter(
-      feed: MomentFeed.following,
-      label: 'Abonnements',
-    ),
-    _FeedFilter(
-      feed: MomentFeed.friends,
-      label: 'Amis',
-    ),
-    _FeedFilter(
-      feed: MomentFeed.trending,
-      label: 'Tendances',
-    ),
+    _FeedFilter(feed: MomentFeed.forYou, label: 'Pour vous'),
+    _FeedFilter(feed: MomentFeed.following, label: 'Abonnements'),
+    _FeedFilter(feed: MomentFeed.friends, label: 'Amis'),
+    _FeedFilter(feed: MomentFeed.trending, label: 'Tendances'),
     _FeedFilter(
       feed: MomentFeed.discover,
       label: 'Découvrir',
@@ -97,28 +85,22 @@ class _FeedFilterButton extends StatelessWidget {
           decoration: BoxDecoration(
             gradient: isDiscover
                 ? const LinearGradient(
-                    colors: [
-                      Color(0xFFEC4899),
-                      Color(0xFF7C3AED),
-                    ],
+                    colors: [Color(0xFFEC4899), Color(0xFF7C3AED)],
                   )
                 : null,
             color: isDiscover
                 ? null
                 : isSelected
-                    ? AppColors.primary
-                    : AppColors.surface,
+                ? AppColors.primary
+                : AppColors.surface,
             borderRadius: AppRadius.medium,
             border: isDiscover || isSelected
                 ? null
-                : Border.all(
-                    color: AppColors.border,
-                  ),
+                : Border.all(color: AppColors.border),
             boxShadow: isDiscover
                 ? [
                     BoxShadow(
-                      color: const Color(0xFF7C3AED)
-                          .withValues(alpha: 0.22),
+                      color: const Color(0xFF7C3AED).withValues(alpha: 0.22),
                       blurRadius: 12,
                       offset: const Offset(0, 5),
                     ),
@@ -129,11 +111,7 @@ class _FeedFilterButton extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               if (filter.icon != null) ...[
-                Icon(
-                  filter.icon,
-                  size: 18,
-                  color: Colors.white,
-                ),
+                Icon(filter.icon, size: 18, color: Colors.white),
                 const SizedBox(width: AppSpacing.xs),
               ],
               Text(
