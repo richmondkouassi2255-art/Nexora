@@ -16,6 +16,7 @@ class MomentCard extends StatelessWidget {
     this.comments = 0,
     this.shares = 0,
     this.mediaColor,
+    this.isLiked = false,
     this.onLikeTap,
     this.onCommentTap,
     this.onShareTap,
@@ -32,8 +33,8 @@ class MomentCard extends StatelessWidget {
   final int comments;
   final int shares;
 
-  /// Temporaire : remplacé plus tard par une vraie image/media.
   final Color? mediaColor;
+  final bool isLiked;
 
   final VoidCallback? onLikeTap;
   final VoidCallback? onCommentTap;
@@ -91,7 +92,6 @@ class MomentCard extends StatelessWidget {
                         style: const TextStyle(
                           color: AppColors.textSecondary,
                           fontSize: 13,
-                          fontWeight: FontWeight.w400,
                         ),
                       ),
                     ],
@@ -107,7 +107,6 @@ class MomentCard extends StatelessWidget {
               ],
             ),
           ),
-
           Padding(
             padding: const EdgeInsets.symmetric(
               horizontal: AppSpacing.lg,
@@ -121,18 +120,12 @@ class MomentCard extends StatelessWidget {
               ),
             ),
           ),
-
           if (mediaColor != null) ...[
             const SizedBox(height: AppSpacing.lg),
             Container(
               height: 260,
               width: double.infinity,
-              decoration: BoxDecoration(
-                color: mediaColor,
-                borderRadius: const BorderRadius.vertical(
-                  bottom: Radius.circular(0),
-                ),
-              ),
+              color: mediaColor,
               child: Center(
                 child: Icon(
                   Icons.image_outlined,
@@ -142,14 +135,18 @@ class MomentCard extends StatelessWidget {
               ),
             ),
           ],
-
           Padding(
             padding: const EdgeInsets.all(AppSpacing.lg),
             child: Row(
               children: [
                 _MomentAction(
-                  icon: Icons.favorite_border_rounded,
+                  icon: isLiked
+                      ? Icons.favorite_rounded
+                      : Icons.favorite_border_rounded,
                   label: reactions.toString(),
+                  color: isLiked
+                      ? AppColors.error
+                      : AppColors.textSecondary,
                   onTap: onLikeTap,
                 ),
                 const SizedBox(width: AppSpacing.lg),
@@ -191,8 +188,6 @@ class _MomentAvatar extends StatelessWidget {
             Color(0xFF8B5CF6),
             Color(0xFF4F46E5),
           ],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
         ),
         shape: BoxShape.circle,
       ),
@@ -213,41 +208,46 @@ class _MomentAction extends StatelessWidget {
   const _MomentAction({
     required this.icon,
     required this.label,
-    this.onTap,
+    required this.onTap,
+    this.color = AppColors.textSecondary,
   });
 
   final IconData icon;
   final String label;
   final VoidCallback? onTap;
+  final Color color;
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: AppRadius.medium,
-      child: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: AppSpacing.sm,
-          vertical: AppSpacing.xs,
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Icon(
-              icon,
-              size: 22,
-              color: AppColors.textSecondary,
-            ),
-            const SizedBox(width: AppSpacing.xs),
-            Text(
-              label,
-              style: const TextStyle(
-                color: AppColors.textSecondary,
-                fontSize: 14,
-                fontWeight: FontWeight.w600,
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: AppRadius.medium,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(
+            horizontal: AppSpacing.sm,
+            vertical: AppSpacing.xs,
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                icon,
+                size: 22,
+                color: color,
               ),
-            ),
-          ],
+              const SizedBox(width: AppSpacing.xs),
+              Text(
+                label,
+                style: TextStyle(
+                  color: color,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

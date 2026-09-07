@@ -3,61 +3,42 @@ import 'package:flutter/material.dart';
 import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_radius.dart';
 import '../../../../app/theme/app_spacing.dart';
+import '../../domain/models/moment.dart';
 
-class FeedFilterBar extends StatefulWidget {
+class FeedFilterBar extends StatelessWidget {
   const FeedFilterBar({
     super.key,
-    this.initialIndex = 0,
-    this.onChanged,
+    required this.selectedFeed,
+    required this.onChanged,
   });
 
-  final int initialIndex;
-  final ValueChanged<int>? onChanged;
+  final MomentFeed selectedFeed;
+  final ValueChanged<MomentFeed> onChanged;
 
-  @override
-  State<FeedFilterBar> createState() => _FeedFilterBarState();
-}
-
-class _FeedFilterBarState extends State<FeedFilterBar> {
-  static const _filters = [
+  static const List<_FeedFilter> _filters = [
     _FeedFilter(
+      feed: MomentFeed.forYou,
       label: 'Pour vous',
     ),
     _FeedFilter(
+      feed: MomentFeed.following,
       label: 'Abonnements',
     ),
     _FeedFilter(
+      feed: MomentFeed.friends,
       label: 'Amis',
     ),
     _FeedFilter(
+      feed: MomentFeed.trending,
       label: 'Tendances',
     ),
     _FeedFilter(
+      feed: MomentFeed.discover,
       label: 'Découvrir',
       icon: Icons.explore_outlined,
       highlighted: true,
     ),
   ];
-
-  late int _selectedIndex;
-
-  @override
-  void initState() {
-    super.initState();
-    _selectedIndex = widget.initialIndex.clamp(0, _filters.length - 1);
-  }
-
-  void _selectFilter(int index) {
-    if (_selectedIndex == index) {
-      return;
-    }
-
-    setState(() {
-      _selectedIndex = index;
-    });
-
-    widget.onChanged?.call(index);
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,16 +48,17 @@ class _FeedFilterBarState extends State<FeedFilterBar> {
         scrollDirection: Axis.horizontal,
         padding: EdgeInsets.zero,
         itemCount: _filters.length,
-        separatorBuilder: (_, __) =>
-            const SizedBox(width: AppSpacing.sm),
+        separatorBuilder: (_, __) {
+          return const SizedBox(width: AppSpacing.sm);
+        },
         itemBuilder: (context, index) {
           final filter = _filters[index];
-          final isSelected = index == _selectedIndex;
+          final isSelected = filter.feed == selectedFeed;
 
           return _FeedFilterButton(
             filter: filter,
             isSelected: isSelected,
-            onTap: () => _selectFilter(index),
+            onTap: () => onChanged(filter.feed),
           );
         },
       ),
@@ -182,11 +164,13 @@ class _FeedFilterButton extends StatelessWidget {
 
 class _FeedFilter {
   const _FeedFilter({
+    required this.feed,
     required this.label,
     this.icon,
     this.highlighted = false,
   });
 
+  final MomentFeed feed;
   final String label;
   final IconData? icon;
   final bool highlighted;

@@ -7,9 +7,8 @@ import '../../../../app/theme/app_spacing.dart';
 import '../../../../core/responsive/responsive_extensions.dart';
 import '../../../../core/widgets/layout/app_page.dart';
 import '../widgets/create_moment_card.dart';
-import '../widgets/feed_filter_bar.dart';
 import '../widgets/home_app_bar.dart';
-import '../widgets/moment_card.dart';
+import '../widgets/home_feed_section.dart';
 import '../widgets/stories_section.dart';
 
 class HomePage extends StatelessWidget {
@@ -117,34 +116,7 @@ class _MobileHomeContent extends StatelessWidget {
           onAddStoryTap: () {},
         ),
         const SizedBox(height: AppSpacing.xxl),
-        const FeedFilterBar(),
-        const SizedBox(height: AppSpacing.xl),
-        const MomentCard(
-          authorName: 'Maya Johnson',
-          username: 'maya',
-          avatarInitials: 'MJ',
-          timeAgo: 'Il y a 2 h',
-          content:
-              'Je viens de terminer mon nouveau projet Flutter. '
-              'Hâte de partager ce que j’ai appris avec la communauté Nexora !',
-          reactions: 124,
-          comments: 24,
-          shares: 8,
-          mediaColor: Color(0xFF4C1D95),
-        ),
-        const SizedBox(height: AppSpacing.lg),
-        const MomentCard(
-          authorName: 'Kevin Martin',
-          username: 'kevin',
-          avatarInitials: 'KM',
-          timeAgo: 'Il y a 4 h',
-          content:
-              'Quelle technologie aimeriez-vous apprendre cette semaine ? '
-              'Partagez vos objectifs avec la communauté.',
-          reactions: 86,
-          comments: 17,
-          shares: 4,
-        ),
+        const HomeFeedSection(),
       ],
     );
   }
@@ -203,34 +175,7 @@ class _DesktopMainColumn extends StatelessWidget {
           onAddStoryTap: () {},
         ),
         const SizedBox(height: AppSpacing.xxl),
-        const FeedFilterBar(),
-        const SizedBox(height: AppSpacing.xl),
-        const MomentCard(
-          authorName: 'Maya Johnson',
-          username: 'maya',
-          avatarInitials: 'MJ',
-          timeAgo: 'Il y a 2 h',
-          content:
-              'Je viens de terminer mon nouveau projet Flutter. '
-              'Hâte de partager ce que j’ai appris avec la communauté Nexora !',
-          reactions: 124,
-          comments: 24,
-          shares: 8,
-          mediaColor: Color(0xFF4C1D95),
-        ),
-        const SizedBox(height: AppSpacing.lg),
-        const MomentCard(
-          authorName: 'Kevin Martin',
-          username: 'kevin',
-          avatarInitials: 'KM',
-          timeAgo: 'Il y a 4 h',
-          content:
-              'Quelle technologie aimeriez-vous apprendre cette semaine ? '
-              'Partagez vos objectifs avec la communauté.',
-          reactions: 86,
-          comments: 17,
-          shares: 4,
-        ),
+        const HomeFeedSection(),
       ],
     );
   }
@@ -384,21 +329,21 @@ class _NotificationsSheet extends StatelessWidget {
               ),
             ),
             const SizedBox(height: AppSpacing.lg),
-            _NotificationItem(
+            const _NotificationItem(
               icon: Icons.favorite_rounded,
               iconColor: AppColors.error,
               title: 'Maya a réagi à ton Moment',
               subtitle: 'Il y a 8 min',
             ),
             const SizedBox(height: AppSpacing.md),
-            _NotificationItem(
+            const _NotificationItem(
               icon: Icons.people_rounded,
               iconColor: AppColors.primary,
               title: 'Kevin a commencé à te suivre',
               subtitle: 'Il y a 32 min',
             ),
             const SizedBox(height: AppSpacing.md),
-            _NotificationItem(
+            const _NotificationItem(
               icon: Icons.auto_awesome_rounded,
               iconColor: AppColors.warning,
               title: 'Nexora AI a une suggestion pour toi',
@@ -505,12 +450,16 @@ class _HomeMenuSheet extends StatelessWidget {
             _MenuItem(
               icon: Icons.settings_outlined,
               title: 'Paramètres',
-              onTap: () {},
+              onTap: () {
+                Navigator.of(context).pop();
+              },
             ),
             _MenuItem(
               icon: Icons.help_outline_rounded,
               title: 'Aide et support',
-              onTap: () {},
+              onTap: () {
+                Navigator.of(context).pop();
+              },
             ),
           ],
         ),
