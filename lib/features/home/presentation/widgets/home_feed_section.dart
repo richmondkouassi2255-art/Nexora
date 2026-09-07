@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../../../app/theme/app_colors.dart';
+import '../../../../app/theme/app_radius.dart';
 import '../../../../app/theme/app_spacing.dart';
 import '../../domain/models/moment.dart';
 import '../providers/feed_provider.dart';
@@ -63,11 +64,11 @@ class HomeFeedSection extends ConsumerWidget {
                 .toggleLike(moments[index].id);
           },
           onCommentTap: () {
-            ref
-                .read(feedControllerProvider.notifier)
-                .addComment(moments[index].id);
-
-            _showCommentFeedback(context);
+            _showCommentsSheet(
+              context,
+              ref,
+              moments[index],
+            );
           },
           onShareTap: () {
             ref
@@ -77,7 +78,11 @@ class HomeFeedSection extends ConsumerWidget {
             _showShareFeedback(context);
           },
           onMoreTap: () {
-            _showMomentMenu(context, moments[index]);
+            _showMomentMenu(
+              context,
+              ref,
+              moments[index],
+            );
           },
         ),
         if (index < moments.length - 1)
@@ -86,17 +91,27 @@ class HomeFeedSection extends ConsumerWidget {
     ];
   }
 
-  void _showCommentFeedback(BuildContext context) {
-    ScaffoldMessenger.of(context)
-      ..hideCurrentSnackBar()
-      ..showSnackBar(
-        const SnackBar(
-          content: Text(
-            'Commentaire ajouté à ton activité.',
-          ),
-          behavior: SnackBarBehavior.floating,
-        ),
-      );
+  void _showCommentsSheet(
+    BuildContext context,
+    WidgetRef ref,
+    Moment moment,
+  ) {
+    showModalBottomSheet<void>(
+      context: context,
+      isScrollControlled: true,
+      backgroundColor: AppColors.surface,
+      showDragHandle: true,
+      builder: (_) {
+        return _CommentsSheet(
+          moment: moment,
+          onCommentAdded: () {
+            ref
+                .read(feedControllerProvider.notifier)
+                .addComment(moment.id);
+          },
+        );
+      },
+    );
   }
 
   void _showShareFeedback(BuildContext context) {
@@ -114,13 +129,14 @@ class HomeFeedSection extends ConsumerWidget {
 
   void _showMomentMenu(
     BuildContext context,
+    WidgetRef ref,
     Moment moment,
   ) {
     showModalBottomSheet<void>(
       context: context,
       backgroundColor: AppColors.surface,
       showDragHandle: true,
-      builder: (context) {
+      builder: (sheetContext) {
         return SafeArea(
           child: Padding(
             padding: const EdgeInsets.fromLTRB(
@@ -137,9 +153,12 @@ class HomeFeedSection extends ConsumerWidget {
                     Icons.bookmark_border_rounded,
                     color: AppColors.primary,
                   ),
-                  title: const Text('Enregistrer'),
+                  title: const Text(
+                    'Enregistrer',
+                  ),
                   onTap: () {
-                    Navigator.of(context).pop();
+                    Navigator.of(sheetContext).pop();
+
                     ScaffoldMessenger.of(context)
                       ..hideCurrentSnackBar()
                       ..showSnackBar(
@@ -161,7 +180,18 @@ class HomeFeedSection extends ConsumerWidget {
                     'Voir le profil de ${moment.authorName}',
                   ),
                   onTap: () {
-                    Navigator.of(context).pop();
+                    Navigator.of(sheetContext).pop();
+
+                    ScaffoldMessenger.of(context)
+                      ..hideCurrentSnackBar()
+                      ..showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            'Profil de ${moment.authorName}.',
+                          ),
+                          behavior: SnackBarBehavior.floating,
+                        ),
+                      );
                   },
                 ),
                 ListTile(
@@ -173,13 +203,18 @@ class HomeFeedSection extends ConsumerWidget {
                     'Masquer ce Moment',
                   ),
                   onTap: () {
-                    Navigator.of(context).pop();
+                    Navigator.of(sheetContext).pop();
+
+                    ref
+                        .read(feedControllerProvider.notifier)
+                        .hideMoment(moment.id);
+
                     ScaffoldMessenger.of(context)
                       ..hideCurrentSnackBar()
                       ..showSnackBar(
                         const SnackBar(
                           content: Text(
-                            'Moment masqué.',
+                            'Moment masqué de ton fil.',
                           ),
                           behavior: SnackBarBehavior.floating,
                         ),
@@ -195,6 +230,436 @@ class HomeFeedSection extends ConsumerWidget {
   }
 }
 
+class _CommentsSheet extends StatefulWidget {
+  const _CommentsSheet({
+    required this.moment,
+    required this.onCommentAdded,
+  });
+
+  final Moment moment;
+  final VoidCallback onCommentAdded;
+
+  @override
+  State<_CommentsSheet> createState() => _CommentsSheetState();
+}
+
+class _CommentsSheetState extends State<_CommentsSheet> {
+  final TextEditingController _controller = TextEditingController();
+  final FocusNode _focusNode = FocusNode();
+
+  final List<_LocalComment> _comments = [];
+
+  @override
+  void initState() {
+    super.initState();
+
+    for (int index = 0; index < widget.moment.comments; index++) {
+      _comments.add(
+        _LocalComment(
+          authorName: _commentAuthor(index),
+          initials: _commentInitials(index),
+          text: _commentText(index),
+        ),
+      );
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    _focusNode.dispose();
+    super.dispose();
+  }
+
+  String _commentAuthor(int index) {
+    const authors = [
+      'Emma',
+      'Lucas',
+      'Sofia',
+      'Noah',
+      'Mia',
+      'Léo',
+    ];
+
+    return authors[index % authors.length];
+  }
+
+  String _commentInitials(int index) {
+    const initials = [
+      'E',
+      'L',
+      'S',
+      'N',
+      'M',
+      'L',
+    ];
+
+    return initials[index % initials.length];
+  }
+
+  String _commentText(int index) {
+    const comments = [
+      'Très intéressant !',
+      'Merci pour ce partage.',
+      'Je suis totalement d’accord.',
+      'Super idée 👏',
+      'Ça donne envie d’essayer.',
+      'Belle publication !',
+    ];
+
+    return comments[index % comments.length];
+  }
+
+  void _submitComment() {
+    final text = _controller.text.trim();
+
+    if (text.isEmpty) {
+      return;
+    }
+
+    setState(() {
+      _comments.add(
+        _LocalComment(
+          authorName: 'Pierre',
+          initials: 'P',
+          text: text,
+          isCurrentUser: true,
+        ),
+      );
+    });
+
+    widget.onCommentAdded();
+
+    _controller.clear();
+    _focusNode.requestFocus();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final bottomInset = MediaQuery.viewInsetsOf(context).bottom;
+
+    return SafeArea(
+      child: Padding(
+        padding: EdgeInsets.only(
+          bottom: bottomInset,
+        ),
+        child: SizedBox(
+          height: MediaQuery.sizeOf(context).height * 0.78,
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(
+                  AppSpacing.lg,
+                  0,
+                  AppSpacing.lg,
+                  AppSpacing.md,
+                ),
+                child: Row(
+                  children: [
+                    const Icon(
+                      Icons.chat_bubble_outline_rounded,
+                      color: AppColors.primary,
+                    ),
+                    const SizedBox(
+                      width: AppSpacing.sm,
+                    ),
+                    Expanded(
+                      child: Text(
+                        'Commentaires (${_comments.length})',
+                        style: const TextStyle(
+                          color: AppColors.textPrimary,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      icon: const Icon(
+                        Icons.close_rounded,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const Divider(
+                height: 1,
+                color: AppColors.border,
+              ),
+              Expanded(
+                child: _comments.isEmpty
+                    ? const _EmptyComments()
+                    : ListView.separated(
+                        padding: const EdgeInsets.all(
+                          AppSpacing.lg,
+                        ),
+                        itemCount: _comments.length,
+                        separatorBuilder: (_, __) {
+                          return const SizedBox(
+                            height: AppSpacing.lg,
+                          );
+                        },
+                        itemBuilder: (context, index) {
+                          return _CommentTile(
+                            comment: _comments[index],
+                          );
+                        },
+                      ),
+              ),
+              Container(
+                padding: const EdgeInsets.fromLTRB(
+                  AppSpacing.md,
+                  AppSpacing.sm,
+                  AppSpacing.md,
+                  AppSpacing.md,
+                ),
+                decoration: const BoxDecoration(
+                  color: AppColors.surface,
+                  border: Border(
+                    top: BorderSide(
+                      color: AppColors.border,
+                    ),
+                  ),
+                ),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    const CircleAvatar(
+                      radius: 19,
+                      backgroundColor: AppColors.primaryLight,
+                      child: Text(
+                        'P',
+                        style: TextStyle(
+                          color: AppColors.primary,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      width: AppSpacing.sm,
+                    ),
+                    Expanded(
+                      child: TextField(
+                        controller: _controller,
+                        focusNode: _focusNode,
+                        minLines: 1,
+                        maxLines: 4,
+                        textCapitalization:
+                            TextCapitalization.sentences,
+                        onSubmitted: (_) {
+                          _submitComment();
+                        },
+                        decoration: InputDecoration(
+                          hintText: 'Écrire un commentaire...',
+                          filled: true,
+                          fillColor:
+                              AppColors.surfaceSecondary,
+                          border: OutlineInputBorder(
+                            borderRadius: AppRadius.large,
+                            borderSide: BorderSide.none,
+                          ),
+                          enabledBorder: OutlineInputBorder(
+                            borderRadius: AppRadius.large,
+                            borderSide: BorderSide.none,
+                          ),
+                          focusedBorder: OutlineInputBorder(
+                            borderRadius: AppRadius.large,
+                            borderSide: const BorderSide(
+                              color: AppColors.primary,
+                            ),
+                          ),
+                          contentPadding:
+                              const EdgeInsets.symmetric(
+                            horizontal: AppSpacing.md,
+                            vertical: AppSpacing.sm,
+                          ),
+                        ),
+                      ),
+                    ),
+                    const SizedBox(
+                      width: AppSpacing.sm,
+                    ),
+                    ValueListenableBuilder<TextEditingValue>(
+                      valueListenable: _controller,
+                      builder: (context, value, _) {
+                        final canSubmit =
+                            value.text.trim().isNotEmpty;
+
+                        return IconButton(
+                          onPressed:
+                              canSubmit ? _submitComment : null,
+                          style: IconButton.styleFrom(
+                            backgroundColor: canSubmit
+                                ? AppColors.primary
+                                : AppColors.surfaceSecondary,
+                            foregroundColor: canSubmit
+                                ? AppColors.white
+                                : AppColors.textMuted,
+                          ),
+                          icon: const Icon(
+                            Icons.send_rounded,
+                            size: 19,
+                          ),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _CommentTile extends StatelessWidget {
+  const _CommentTile({
+    required this.comment,
+  });
+
+  final _LocalComment comment;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        CircleAvatar(
+          radius: 20,
+          backgroundColor: comment.isCurrentUser
+              ? AppColors.primaryLight
+              : AppColors.surfaceSecondary,
+          child: Text(
+            comment.initials,
+            style: TextStyle(
+              color: comment.isCurrentUser
+                  ? AppColors.primary
+                  : AppColors.textSecondary,
+              fontWeight: FontWeight.w800,
+              fontSize: 13,
+            ),
+          ),
+        ),
+        const SizedBox(
+          width: AppSpacing.sm,
+        ),
+        Expanded(
+          child: Container(
+            padding: const EdgeInsets.all(
+              AppSpacing.md,
+            ),
+            decoration: BoxDecoration(
+              color: comment.isCurrentUser
+                  ? AppColors.primaryLight
+                  : AppColors.surfaceSecondary,
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  comment.authorName,
+                  style: const TextStyle(
+                    color: AppColors.textPrimary,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                const SizedBox(
+                  height: AppSpacing.xs,
+                ),
+                Text(
+                  comment.text,
+                  style: const TextStyle(
+                    color: AppColors.textPrimary,
+                    fontSize: 14,
+                    height: 1.4,
+                  ),
+                ),
+                const SizedBox(
+                  height: AppSpacing.xs,
+                ),
+                const Text(
+                  'À l’instant',
+                  style: TextStyle(
+                    color: AppColors.textMuted,
+                    fontSize: 11,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _LocalComment {
+  const _LocalComment({
+    required this.authorName,
+    required this.initials,
+    required this.text,
+    this.isCurrentUser = false,
+  });
+
+  final String authorName;
+  final String initials;
+  final String text;
+  final bool isCurrentUser;
+}
+
+class _EmptyComments extends StatelessWidget {
+  const _EmptyComments();
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(
+      child: Padding(
+        padding: EdgeInsets.all(
+          AppSpacing.xxl,
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              Icons.chat_bubble_outline_rounded,
+              size: 44,
+              color: AppColors.primary,
+            ),
+            SizedBox(
+              height: AppSpacing.md,
+            ),
+            Text(
+              'Aucun commentaire',
+              style: TextStyle(
+                color: AppColors.textPrimary,
+                fontSize: 17,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            SizedBox(
+              height: AppSpacing.xs,
+            ),
+            Text(
+              'Sois la première personne à réagir à ce Moment.',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: AppColors.textSecondary,
+                fontSize: 14,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class _EmptyFeed extends StatelessWidget {
   const _EmptyFeed();
 
@@ -202,7 +667,9 @@ class _EmptyFeed extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: double.infinity,
-      padding: const EdgeInsets.all(AppSpacing.xxl),
+      padding: const EdgeInsets.all(
+        AppSpacing.xxl,
+      ),
       decoration: BoxDecoration(
         color: AppColors.surface,
         borderRadius: BorderRadius.circular(20),
@@ -217,7 +684,9 @@ class _EmptyFeed extends StatelessWidget {
             size: 44,
             color: AppColors.primary,
           ),
-          SizedBox(height: AppSpacing.md),
+          SizedBox(
+            height: AppSpacing.md,
+          ),
           Text(
             'Rien à afficher pour le moment',
             textAlign: TextAlign.center,
@@ -227,7 +696,9 @@ class _EmptyFeed extends StatelessWidget {
               fontWeight: FontWeight.w700,
             ),
           ),
-          SizedBox(height: AppSpacing.xs),
+          SizedBox(
+            height: AppSpacing.xs,
+          ),
           Text(
             'Découvre de nouvelles personnes et communautés.',
             textAlign: TextAlign.center,
