@@ -7,6 +7,7 @@ import '../../../../app/theme/app_spacing.dart';
 import '../../../../core/responsive/responsive_extensions.dart';
 import '../../../../core/widgets/layout/app_page.dart';
 import '../widgets/create_moment_card.dart';
+import '../widgets/create_moment_sheet.dart';
 import '../widgets/home_app_bar.dart';
 import '../widgets/home_feed_section.dart';
 import '../widgets/stories_section.dart';
@@ -40,6 +41,10 @@ class HomePage extends StatelessWidget {
     );
   }
 
+  void _createMoment(BuildContext context) {
+    showCreateMomentSheet(context);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -59,6 +64,7 @@ class HomePage extends StatelessWidget {
             ),
             child: _HomeContent(
               isDesktop: context.isDesktop,
+              onCreateMoment: () => _createMoment(context),
             ),
           ),
         ),
@@ -70,22 +76,32 @@ class HomePage extends StatelessWidget {
 class _HomeContent extends StatelessWidget {
   const _HomeContent({
     required this.isDesktop,
+    required this.onCreateMoment,
   });
 
   final bool isDesktop;
+  final VoidCallback onCreateMoment;
 
   @override
   Widget build(BuildContext context) {
     if (isDesktop) {
-      return const _DesktopHomeContent();
+      return _DesktopHomeContent(
+        onCreateMoment: onCreateMoment,
+      );
     }
 
-    return const _MobileHomeContent();
+    return _MobileHomeContent(
+      onCreateMoment: onCreateMoment,
+    );
   }
 }
 
 class _MobileHomeContent extends StatelessWidget {
-  const _MobileHomeContent();
+  const _MobileHomeContent({
+    required this.onCreateMoment,
+  });
+
+  final VoidCallback onCreateMoment;
 
   @override
   Widget build(BuildContext context) {
@@ -102,13 +118,13 @@ class _MobileHomeContent extends StatelessWidget {
         ),
         const SizedBox(height: AppSpacing.xl),
         CreateMomentCard(
-          onCreateTap: () {},
-          onPhotoTap: () {},
-          onVideoTap: () {},
-          onTextTap: () {},
-          onMoodTap: () {},
-          onLocationTap: () {},
-          onMusicTap: () {},
+          onCreateTap: onCreateMoment,
+          onPhotoTap: onCreateMoment,
+          onVideoTap: onCreateMoment,
+          onTextTap: onCreateMoment,
+          onMoodTap: onCreateMoment,
+          onLocationTap: onCreateMoment,
+          onMusicTap: onCreateMoment,
         ),
         const SizedBox(height: AppSpacing.xxl),
         StoriesSection(
@@ -123,15 +139,21 @@ class _MobileHomeContent extends StatelessWidget {
 }
 
 class _DesktopHomeContent extends StatelessWidget {
-  const _DesktopHomeContent();
+  const _DesktopHomeContent({
+    required this.onCreateMoment,
+  });
+
+  final VoidCallback onCreateMoment;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Expanded(
-          child: _DesktopMainColumn(),
+        Expanded(
+          child: _DesktopMainColumn(
+            onCreateMoment: onCreateMoment,
+          ),
         ),
         const SizedBox(width: AppSpacing.xxl),
         const SizedBox(
@@ -144,7 +166,11 @@ class _DesktopHomeContent extends StatelessWidget {
 }
 
 class _DesktopMainColumn extends StatelessWidget {
-  const _DesktopMainColumn();
+  const _DesktopMainColumn({
+    required this.onCreateMoment,
+  });
+
+  final VoidCallback onCreateMoment;
 
   @override
   Widget build(BuildContext context) {
@@ -161,13 +187,13 @@ class _DesktopMainColumn extends StatelessWidget {
         ),
         const SizedBox(height: AppSpacing.xl),
         CreateMomentCard(
-          onCreateTap: () {},
-          onPhotoTap: () {},
-          onVideoTap: () {},
-          onTextTap: () {},
-          onMoodTap: () {},
-          onLocationTap: () {},
-          onMusicTap: () {},
+          onCreateTap: onCreateMoment,
+          onPhotoTap: onCreateMoment,
+          onVideoTap: onCreateMoment,
+          onTextTap: onCreateMoment,
+          onMoodTap: onCreateMoment,
+          onLocationTap: onCreateMoment,
+          onMusicTap: onCreateMoment,
         ),
         const SizedBox(height: AppSpacing.xxl),
         StoriesSection(

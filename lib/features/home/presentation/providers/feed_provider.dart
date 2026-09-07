@@ -8,7 +8,9 @@ final localFeedRepositoryProvider = Provider<LocalFeedRepository>((ref) {
 });
 
 final feedControllerProvider =
-    NotifierProvider<FeedController, FeedState>(FeedController.new);
+    NotifierProvider<FeedController, FeedState>(
+  FeedController.new,
+);
 
 class FeedState {
   const FeedState({
@@ -51,6 +53,40 @@ class FeedController extends Notifier<FeedState> {
   void selectFeed(MomentFeed feed) {
     state = state.copyWith(
       selectedFeed: feed,
+    );
+  }
+
+  void createMoment({
+    required String content,
+  }) {
+    final trimmedContent = content.trim();
+
+    if (trimmedContent.isEmpty) {
+      return;
+    }
+
+    final moment = Moment(
+      id: 'moment-${DateTime.now().microsecondsSinceEpoch}',
+      authorName: 'Pierre',
+      username: 'pierre',
+      avatarInitials: 'P',
+      content: trimmedContent,
+      timeAgo: 'À l’instant',
+      reactions: 0,
+      comments: 0,
+      shares: 0,
+      feedTypes: const [
+        MomentFeed.forYou,
+        MomentFeed.following,
+        MomentFeed.friends,
+      ],
+    );
+
+    state = state.copyWith(
+      moments: [
+        moment,
+        ...state.moments,
+      ],
     );
   }
 
@@ -101,6 +137,16 @@ class FeedController extends Notifier<FeedState> {
         shares: moment.shares + 1,
       );
     }).toList();
+
+    state = state.copyWith(
+      moments: moments,
+    );
+  }
+
+  void hideMoment(String momentId) {
+    final moments = state.moments
+        .where((moment) => moment.id != momentId)
+        .toList();
 
     state = state.copyWith(
       moments: moments,
