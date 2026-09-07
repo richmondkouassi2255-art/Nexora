@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
+import '../../../../app/router/app_routes.dart';
+import '../../../../app/theme/app_colors.dart';
 import '../../../../app/theme/app_spacing.dart';
 import '../../../../core/responsive/responsive_extensions.dart';
 import '../../../../core/widgets/layout/app_page.dart';
@@ -12,14 +15,40 @@ import '../widgets/stories_section.dart';
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
+  void _openSpaces(BuildContext context) {
+    context.push(AppRoutes.spaces);
+  }
+
+  void _showNotifications(BuildContext context) {
+    showModalBottomSheet<void>(
+      context: context,
+      backgroundColor: AppColors.surface,
+      showDragHandle: true,
+      builder: (context) {
+        return const _NotificationsSheet();
+      },
+    );
+  }
+
+  void _showMenu(BuildContext context) {
+    showModalBottomSheet<void>(
+      context: context,
+      backgroundColor: AppColors.surface,
+      showDragHandle: true,
+      builder: (context) {
+        return const _HomeMenuSheet();
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         HomeAppBar(
-          onNotificationsTap: () {},
-          onSpacesTap: () {},
-          onMenuTap: () {},
+          onNotificationsTap: () => _showNotifications(context),
+          onSpacesTap: () => _openSpaces(context),
+          onMenuTap: () => _showMenu(context),
         ),
         Expanded(
           child: AppPage(
@@ -49,10 +78,10 @@ class _HomeContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (isDesktop) {
-      return _DesktopHomeContent();
+      return const _DesktopHomeContent();
     }
 
-    return _MobileHomeContent();
+    return const _MobileHomeContent();
   }
 }
 
@@ -67,6 +96,7 @@ class _MobileHomeContent extends StatelessWidget {
         const Text(
           'Accueil',
           style: TextStyle(
+            color: AppColors.textPrimary,
             fontSize: 30,
             fontWeight: FontWeight.w800,
           ),
@@ -128,7 +158,7 @@ class _DesktopHomeContent extends StatelessWidget {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Expanded(
+        const Expanded(
           child: _DesktopMainColumn(),
         ),
         const SizedBox(width: AppSpacing.xxl),
@@ -152,6 +182,7 @@ class _DesktopMainColumn extends StatelessWidget {
         const Text(
           'Accueil',
           style: TextStyle(
+            color: AppColors.textPrimary,
             fontSize: 34,
             fontWeight: FontWeight.w800,
           ),
@@ -262,10 +293,10 @@ class _SidePanelCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(AppSpacing.lg),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.surface,
         borderRadius: BorderRadius.circular(20),
         border: Border.all(
-          color: const Color(0xFFE5E7EB),
+          color: AppColors.border,
         ),
       ),
       child: Column(
@@ -274,6 +305,7 @@ class _SidePanelCard extends StatelessWidget {
           Text(
             title,
             style: const TextStyle(
+              color: AppColors.textPrimary,
               fontSize: 18,
               fontWeight: FontWeight.w800,
             ),
@@ -307,6 +339,7 @@ class _TrendingItem extends StatelessWidget {
           Text(
             title,
             style: const TextStyle(
+              color: AppColors.textPrimary,
               fontSize: 14,
               fontWeight: FontWeight.w700,
             ),
@@ -315,12 +348,218 @@ class _TrendingItem extends StatelessWidget {
           Text(
             subtitle,
             style: const TextStyle(
-              color: Color(0xFF6B7280),
+              color: AppColors.textSecondary,
               fontSize: 12,
             ),
           ),
         ],
       ),
+    );
+  }
+}
+
+class _NotificationsSheet extends StatelessWidget {
+  const _NotificationsSheet();
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(
+          AppSpacing.lg,
+          0,
+          AppSpacing.lg,
+          AppSpacing.xxl,
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              'Notifications',
+              style: TextStyle(
+                color: AppColors.textPrimary,
+                fontSize: 22,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+            const SizedBox(height: AppSpacing.lg),
+            _NotificationItem(
+              icon: Icons.favorite_rounded,
+              iconColor: AppColors.error,
+              title: 'Maya a réagi à ton Moment',
+              subtitle: 'Il y a 8 min',
+            ),
+            const SizedBox(height: AppSpacing.md),
+            _NotificationItem(
+              icon: Icons.people_rounded,
+              iconColor: AppColors.primary,
+              title: 'Kevin a commencé à te suivre',
+              subtitle: 'Il y a 32 min',
+            ),
+            const SizedBox(height: AppSpacing.md),
+            _NotificationItem(
+              icon: Icons.auto_awesome_rounded,
+              iconColor: AppColors.warning,
+              title: 'Nexora AI a une suggestion pour toi',
+              subtitle: 'Il y a 1 h',
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _NotificationItem extends StatelessWidget {
+  const _NotificationItem({
+    required this.icon,
+    required this.iconColor,
+    required this.title,
+    required this.subtitle,
+  });
+
+  final IconData icon;
+  final Color iconColor;
+  final String title;
+  final String subtitle;
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Container(
+          width: 44,
+          height: 44,
+          decoration: BoxDecoration(
+            color: iconColor.withValues(alpha: 0.12),
+            shape: BoxShape.circle,
+          ),
+          child: Icon(
+            icon,
+            color: iconColor,
+            size: 21,
+          ),
+        ),
+        const SizedBox(width: AppSpacing.md),
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                title,
+                style: const TextStyle(
+                  color: AppColors.textPrimary,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+              const SizedBox(height: 3),
+              Text(
+                subtitle,
+                style: const TextStyle(
+                  color: AppColors.textMuted,
+                  fontSize: 12,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class _HomeMenuSheet extends StatelessWidget {
+  const _HomeMenuSheet();
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(
+          AppSpacing.lg,
+          0,
+          AppSpacing.lg,
+          AppSpacing.lg,
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _MenuItem(
+              icon: Icons.search_rounded,
+              title: 'Explorer',
+              onTap: () {
+                Navigator.of(context).pop();
+                context.push(AppRoutes.explore);
+              },
+            ),
+            _MenuItem(
+              icon: Icons.groups_rounded,
+              title: 'Spaces',
+              onTap: () {
+                Navigator.of(context).pop();
+                context.push(AppRoutes.spaces);
+              },
+            ),
+            _MenuItem(
+              icon: Icons.settings_outlined,
+              title: 'Paramètres',
+              onTap: () {},
+            ),
+            _MenuItem(
+              icon: Icons.help_outline_rounded,
+              title: 'Aide et support',
+              onTap: () {},
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _MenuItem extends StatelessWidget {
+  const _MenuItem({
+    required this.icon,
+    required this.title,
+    required this.onTap,
+  });
+
+  final IconData icon;
+  final String title;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      contentPadding: const EdgeInsets.symmetric(
+        vertical: AppSpacing.xs,
+      ),
+      leading: Container(
+        width: 42,
+        height: 42,
+        decoration: BoxDecoration(
+          color: AppColors.primaryLight,
+          borderRadius: AppRadius.medium,
+        ),
+        child: Icon(
+          icon,
+          color: AppColors.primary,
+        ),
+      ),
+      title: Text(
+        title,
+        style: const TextStyle(
+          color: AppColors.textPrimary,
+          fontWeight: FontWeight.w600,
+        ),
+      ),
+      trailing: const Icon(
+        Icons.chevron_right_rounded,
+        color: AppColors.textMuted,
+      ),
+      onTap: onTap,
     );
   }
 }
